@@ -1,0 +1,36 @@
+{
+  "name": "copy-issue-labels",
+  "version": "1.0.0",
+  "description": "Github action for copying labels of linked issues",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc && ncc build lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalvankodev/copy-issue-labels.git"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "labels",
+    "issues",
+    "pulls"
+  ],
+  "author": "Michal Vanko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michalvankodev/copy-issue-labels/issues"
+  },
+  "homepage": "https://github.com/michalvankodev/copy-issue-labels#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.25.1",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.2"
+  }
+}
