@@ -41,26 +41,26 @@ const github = __importStar(__webpack_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const token = core.getInput("repo-token", { required: true });
-        const issueId = getIssueId(core.getInput("issueToLabel", { required: false }));
+        const pullNumber = getPullNumber(core.getInput("pull-number", { required: false }));
         const client = github.getOctokit(token);
-        if (issueId === undefined) {
+        if (pullNumber === undefined) {
             core.setFailed('No issue specified');
             return;
         }
-        const { data: issueData } = yield client.issues.get({
+        const { data: issueData } = yield client.pulls.get({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            issue_number: issueId,
+            pull_number: pullNumber,
         });
         console.log(issueData);
     });
 }
-function getIssueId(issueToLabel) {
-    var _a, _b, _c;
-    if (issueToLabel) {
-        return Number(issueToLabel);
+function getPullNumber(pullNumber) {
+    var _a;
+    if (pullNumber) {
+        return Number(pullNumber);
     }
-    return (_b = (_a = github.context.payload.issue) === null || _a === void 0 ? void 0 : _a.number) !== null && _b !== void 0 ? _b : (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.number;
+    return (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
 }
 run();
 
