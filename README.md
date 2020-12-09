@@ -34,3 +34,5 @@ There is also support for different workflows to trigger sync of the labels with
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.inputs.issue }}
 ```
+
+Because GitHub API doesn't provide information about linked issues this workflow will parse the information from the `body` of the issue.
