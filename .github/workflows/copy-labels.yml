@@ -1,11 +1,11 @@
 on: [pull_request]
 
 jobs:
-  hello_world_job:
+  copy-labels:
     runs-on: ubuntu-latest
     name: Copy labels from linked issues
     steps:
       - name: copy-labels
-        uses: michalvankodev/copy-issue-labels@v0.2.12
+        uses: michalvankodev/copy-issue-labels@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
