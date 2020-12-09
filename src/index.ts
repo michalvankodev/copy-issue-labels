@@ -3,25 +3,25 @@ import * as github from '@actions/github'
 
 async function run() {
   const token = core.getInput("repo-token", { required: true })
-  const pullNumber = getPullNumber(core.getInput("pull-number", { required: false }))
+  const issueNumber = getIssueNumber(core.getInput("issue-number", { required: false }))
   const client = github.getOctokit(token)
 
-  if (pullNumber === undefined) {
+  if (issueNumber === undefined) {
     core.setFailed('No issue specified')
     return
   }
 
-  const { data: issueData } = await client.pulls.get({
+  const { data: issueData } = await client.issues.listEvents({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    pull_number: pullNumber,
+    issue_number: issueNumber,
   })
 
   console.log (issueData)
 
 }
 
-function getPullNumber(pullNumber: string) {
+function getIssueNumber(pullNumber: string) {
   if (pullNumber) {
     return Number(pullNumber)
   }

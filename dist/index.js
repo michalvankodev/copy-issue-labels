@@ -41,21 +41,21 @@ const github = __importStar(__webpack_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const token = core.getInput("repo-token", { required: true });
-        const pullNumber = getPullNumber(core.getInput("pull-number", { required: false }));
+        const issueNumber = getIssueNumber(core.getInput("issue-number", { required: false }));
         const client = github.getOctokit(token);
-        if (pullNumber === undefined) {
+        if (issueNumber === undefined) {
             core.setFailed('No issue specified');
             return;
         }
-        const { data: issueData } = yield client.pulls.get({
+        const { data: issueData } = yield client.issues.listEvents({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            pull_number: pullNumber,
+            issue_number: issueNumber,
         });
         console.log(issueData);
     });
 }
-function getPullNumber(pullNumber) {
+function getIssueNumber(pullNumber) {
     var _a;
     if (pullNumber) {
         return Number(pullNumber);
