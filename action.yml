@@ -1,11 +1,11 @@
 name: 'copy-issue-labels'
 description: 'Copy labels from linkend issues'
 author: 'Michal Vanko'
+icon: 'bookmark'
+color: 'yellow'
 inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'
 runs:
   using: 'node12'
   main: 'dist/index.js'
-icon: bookmark
-color: yellow
