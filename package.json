@@ -2,7 +2,7 @@
   "name": "copy-issue-labels",
   "version": "1.0.0",
   "description": "Github action for copying labels of linked issues",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc && ncc build --source-map",
     "test": "jest"

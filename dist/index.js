@@ -1,4 +1,4 @@
-module.exports =
+require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -38,21 +38,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
+const issue_parser_1 = __webpack_require__(737);
 function run() {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const token = core.getInput("repo-token", { required: true });
-        const issueNumber = getIssueNumber(core.getInput("issue-number", { required: false }));
+        const token = core.getInput('repo-token', { required: true });
+        const issueNumber = getIssueNumber(core.getInput('issue-number', { required: false }));
         const client = github.getOctokit(token);
         if (issueNumber === undefined) {
             core.setFailed('No issue specified');
             return;
         }
-        const { data: issueData } = yield client.issues.listEvents({
+        const { data: issueData } = yield client.issues.get({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: issueNumber,
         });
-        console.log(issueData);
+        const connectedIssues = issue_parser_1.parseReferencedIssues((_a = issueData.body) !== null && _a !== void 0 ? _a : '');
+        const connectedLabelsResponses = yield Promise.all(connectedIssues.map((connectedIssue) => __awaiter(this, void 0, void 0, function* () {
+            return client.issues.listLabelsOnIssue({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                issue_number: connectedIssue,
+            });
+        })));
+        const labels = issue_parser_1.uniq(connectedLabelsResponses.reduce((acc, response) => {
+            const issueLabels = response.data.map((label) => label.name);
+            return [...acc, ...issueLabels];
+        }, []));
+        yield client.issues.addLabels({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            issue_number: issueNumber,
+            labels,
+        });
     });
 }
 function getIssueNumber(pullNumber) {
@@ -63,6 +82,31 @@ function getIssueNumber(pullNumber) {
     return (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
 }
 run();
+
+
+/***/ }),
+
+/***/ 737:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.uniq = exports.parseReferencedIssues = void 0;
+const referenceRegExp = /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\d+)/gi;
+function parseReferencedIssues(body) {
+    const found = [];
+    let match;
+    while ((match = referenceRegExp.exec(body))) {
+        found.push(Number(match[2]));
+    }
+    return uniq(found);
+}
+exports.parseReferencedIssues = parseReferencedIssues;
+function uniq(arr) {
+    return arr.filter((v, i, a) => a.indexOf(v) === i);
+}
+exports.uniq = uniq;
 
 
 /***/ }),
@@ -5987,3 +6031,4 @@ module.exports = require("zlib");;
 /******/ 	return __webpack_require__(822);
 /******/ })()
 ;
+//# sourceMappingURL=index.js.map
