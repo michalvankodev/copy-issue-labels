@@ -56,11 +56,11 @@ function run() {
     });
 }
 function getIssueId(issueToLabel) {
-    var _a;
+    var _a, _b, _c;
     if (issueToLabel) {
         return Number(issueToLabel);
     }
-    return (_a = github.context.payload.issue) === null || _a === void 0 ? void 0 : _a.number;
+    return (_b = (_a = github.context.payload.issue) === null || _a === void 0 ? void 0 : _a.number) !== null && _b !== void 0 ? _b : (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.number;
 }
 run();
 

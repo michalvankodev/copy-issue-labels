@@ -25,7 +25,7 @@ function getIssueId(issueToLabel: string) {
   if (issueToLabel) {
     return Number(issueToLabel)
   }
-  return github.context.payload.issue?.number
+  return github.context.payload.issue?.number ?? github.context.payload.pull_request?.number
 }
 
 run()
