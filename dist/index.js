@@ -43,10 +43,14 @@ function run() {
         const token = core.getInput("repo-token", { required: true });
         const issueId = getIssueId(core.getInput("issueToLabel", { required: false }));
         const client = github.getOctokit(token);
+        if (issueId === undefined) {
+            core.setFailed('No issue specified');
+            return;
+        }
         const { data: issueData } = yield client.issues.get({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            issue_number: Number(issueId),
+            issue_number: issueId,
         });
         console.log(issueData);
     });

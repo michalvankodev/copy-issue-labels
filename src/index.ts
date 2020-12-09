@@ -6,10 +6,15 @@ async function run() {
   const issueId = getIssueId(core.getInput("issueToLabel", { required: false }))
   const client = github.getOctokit(token)
 
+  if (issueId === undefined) {
+    core.setFailed('No issue specified')
+    return
+  }
+
   const { data: issueData } = await client.issues.get({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    issue_number: Number(issueId),
+    issue_number: issueId,
   })
 
   console.log (issueData)
