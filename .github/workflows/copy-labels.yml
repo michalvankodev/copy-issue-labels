@@ -8,4 +8,4 @@ jobs:
       - name: copy-labels
         uses: michalvankodev/copy-issue-labels@v0.2.1
         with:
-          repo-token: ${secrets.GITHUB_TOKEN}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
