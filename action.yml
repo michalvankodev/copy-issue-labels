@@ -1,0 +1,9 @@
+name: 'copy-issue-labels'
+description: 'Copy labels from linkend issues'
+author: 'Michal Vanko'
+inputs:
+  repo-token:
+    description: 'The GITHUB_TOKEN secret'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
