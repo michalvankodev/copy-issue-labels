@@ -1,0 +1,9 @@
+on: [pull_request]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Copy labels from linked issues
+    steps:
+      - name: copy-labels
+        uses: michalvankodev/copy-issue-labels@v0
