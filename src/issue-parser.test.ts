@@ -40,7 +40,7 @@ describe('parse connected issues from issue body', () => {
     ).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
   })
 
-  it('should not react on keywords when there is not hastag', () => {
+  it('should not react on keywords when there is no hastag', () => {
     const body = `
       close 123
     `
@@ -111,7 +111,7 @@ describe('parse connected issues with custom keywords from issue', () => {
     ).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
   })
 
-  it('should not react on keywords when there is not hastag', () => {
+  it('should not react on keywords when there is no hastag', () => {
     const body = `
       solves 123
     `
