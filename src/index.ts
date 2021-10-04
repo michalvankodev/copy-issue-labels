@@ -1,18 +1,32 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { parseReferencedIssues, uniq } from './issue-parser'
+import {
+  createReferenceRegExp,
+  parseReferencedIssues,
+  uniq,
+} from './issue-parser'
+
+function getInputAsArray(name: string, options?: core.InputOptions): string[] {
+  return core
+    .getInput(name, options)
+    .split('\n')
+    .map((s) => s.trim())
+    .filter((x) => x !== '')
+}
 
 async function run() {
   const token = core.getInput('repo-token', { required: true })
+  const customKeywords = getInputAsArray('custom-keywords')
+
   const issueNumber = getIssueNumber(
     core.getInput('issue-number', { required: false })
   )
-  const client = github.getOctokit(token)
-
   if (issueNumber === undefined) {
     core.setFailed('No issue specified')
     return
   }
+
+  const client = github.getOctokit(token)
 
   const { data: issueData } = await client.issues.get({
     owner: github.context.repo.owner,
@@ -20,7 +34,12 @@ async function run() {
     issue_number: issueNumber,
   })
 
-  const connectedIssues = parseReferencedIssues(issueData.body ?? '')
+  const referenceRegExp = createReferenceRegExp(customKeywords)
+
+  const connectedIssues = parseReferencedIssues(
+    issueData.body ?? '',
+    referenceRegExp
+  )
 
   const connectedLabelsResponses = await Promise.all(
     connectedIssues.map(async (connectedIssue) =>

@@ -6,7 +6,7 @@ Motivation for creating this action was to copy labels from linked issues to the
 
 This workflow will copy labels from the linked issue for the opened PR.
 
-Github issues can link other issues and this linkin is done automatically whenever PR mentions one of the keywords for automated workflows. [See documentation](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
+Github issues can link other issues and this linking is done automatically whenever PR mentions one of the keywords for automated workflows. [See documentation](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
 
 ```yml
 on: 
@@ -36,3 +36,20 @@ There is also support for different workflows to trigger sync of the labels with
 ```
 
 Because GitHub API doesn't provide information about linked issues this workflow will parse the information from the `body` of the issue.
+
+## Custom keywords
+
+You can provide custom keywords which will be picked up by the parser.
+
+These keywords will not override github specified keywords.
+
+```yml
+steps:
+  - name: copy-labels
+    uses: michalvankodev/copy-issue-labels@v1
+    with:
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      custom-keywords: |
+        solves
+        references
+```
