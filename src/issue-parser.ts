@@ -1,6 +1,26 @@
-const referenceRegExp = /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\d+)/gi
+const keywords = [
+  'close',
+  'closes',
+  'closed',
+  'fix',
+  'fixes',
+  'fixed',
+  'resolve',
+  'resolves',
+  'resolved',
+]
 
-export function parseReferencedIssues(body: string): number[] {
+export function createReferenceRegExp(customKeywords: string[] = []) {
+  return new RegExp(
+    `(${keywords.concat(customKeywords).join('|')}) #(\\d+)`,
+    'gi'
+  )
+}
+
+export function parseReferencedIssues(
+  body: string,
+  referenceRegExp: RegExp
+): number[] {
   const found = []
   let match
   while ((match = referenceRegExp.exec(body))) {
