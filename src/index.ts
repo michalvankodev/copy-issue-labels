@@ -33,7 +33,6 @@ async function run() {
     repo: github.context.repo.repo,
     issue_number: issueNumber,
   })
-  console.log(issueData)
 
   const referenceRegExp = createReferenceRegExp(customKeywords)
 

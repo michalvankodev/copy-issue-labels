@@ -39,22 +39,31 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 const issue_parser_1 = __webpack_require__(737);
+function getInputAsArray(name, options) {
+    return core
+        .getInput(name, options)
+        .split('\n')
+        .map((s) => s.trim())
+        .filter((x) => x !== '');
+}
 function run() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const token = core.getInput('repo-token', { required: true });
+        const customKeywords = getInputAsArray('custom-keywords', { required: false });
         const issueNumber = getIssueNumber(core.getInput('issue-number', { required: false }));
-        const client = github.getOctokit(token);
         if (issueNumber === undefined) {
             core.setFailed('No issue specified');
             return;
         }
+        const client = github.getOctokit(token);
         const { data: issueData } = yield client.issues.get({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: issueNumber,
         });
-        const connectedIssues = issue_parser_1.parseReferencedIssues((_a = issueData.body) !== null && _a !== void 0 ? _a : '');
+        const referenceRegExp = issue_parser_1.createReferenceRegExp(customKeywords);
+        const connectedIssues = issue_parser_1.parseReferencedIssues((_a = issueData.body) !== null && _a !== void 0 ? _a : '', referenceRegExp);
         const connectedLabelsResponses = yield Promise.all(connectedIssues.map((connectedIssue) => __awaiter(this, void 0, void 0, function* () {
             return client.issues.listLabelsOnIssue({
                 owner: github.context.repo.owner,
@@ -92,9 +101,23 @@ run();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.uniq = exports.parseReferencedIssues = void 0;
-const referenceRegExp = /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\d+)/gi;
-function parseReferencedIssues(body) {
+exports.uniq = exports.parseReferencedIssues = exports.createReferenceRegExp = void 0;
+const keywords = [
+    'close',
+    'closes',
+    'closed',
+    'fix',
+    'fixes',
+    'fixed',
+    'resolve',
+    'resolves',
+    'resolved',
+];
+function createReferenceRegExp(customKeywords = []) {
+    return new RegExp(`(${keywords.concat(customKeywords).join('|')}) #(\\d+)`, 'gi');
+}
+exports.createReferenceRegExp = createReferenceRegExp;
+function parseReferencedIssues(body, referenceRegExp) {
     const found = [];
     let match;
     while ((match = referenceRegExp.exec(body))) {
