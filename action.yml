@@ -6,6 +6,8 @@ color: 'yellow'
 inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'
+  custom-keywords:
+    description: 'List of custom keywords which should be included in the parser'
 runs:
   using: 'node12'
   main: 'dist/index.js'
