@@ -53,3 +53,14 @@ steps:
         solves
         references
 ```
+
+## Development
+
+The deployed code is stored in the repository as that's how github action runner is able to run the action with _runners_.
+
+1. Don't forget to first build the action before releasing new version
+  `npm run build`
+
+2. Commit
+3. Create a new git tag: `git tag -a -m "Feature added" v1.x.y`
+4. Publish `git push --follow-tags`
