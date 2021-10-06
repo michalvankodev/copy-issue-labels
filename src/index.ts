@@ -16,7 +16,7 @@ function getInputAsArray(name: string, options?: core.InputOptions): string[] {
 
 async function run() {
   const token = core.getInput('repo-token', { required: true })
-  const customKeywords = getInputAsArray('custom-keywords')
+  const customKeywords = getInputAsArray('custom-keywords', { required: false })
 
   const issueNumber = getIssueNumber(
     core.getInput('issue-number', { required: false })
@@ -33,6 +33,7 @@ async function run() {
     repo: github.context.repo.repo,
     issue_number: issueNumber,
   })
+  console.log(issueData)
 
   const referenceRegExp = createReferenceRegExp(customKeywords)
 
