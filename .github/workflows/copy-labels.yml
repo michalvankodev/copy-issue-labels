@@ -6,7 +6,7 @@ jobs:
     name: Copy labels from linked issues
     steps:
       - name: copy-labels
-        uses: michalvankodev/copy-issue-labels@v1.1.3
+        uses: michalvankodev/copy-issue-labels@v1.1.4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           custom-keywords: |
