@@ -54,6 +54,19 @@ steps:
         references
 ```
 
+## Parse from title
+
+You can provide from-title = true to parse the issue numbers from title
+
+```yml
+steps:
+  - name: copy-labels
+    uses: michalvankodev/copy-issue-labels@v1
+    with:
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      from-title: true
+```
+
 ## Development
 
 The deployed code is stored in the repository as that's how github action runner is able to run the action with _runners_.
