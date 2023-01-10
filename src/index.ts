@@ -17,6 +17,7 @@ function getInputAsArray(name: string, options?: core.InputOptions): string[] {
 async function run() {
   const token = core.getInput('repo-token', { required: true })
   const customKeywords = getInputAsArray('custom-keywords', { required: false })
+  const fromTitle = core.getBooleanInput('from-title', { required: false })
 
   const issueNumber = getIssueNumber(
     core.getInput('issue-number', { required: false })
@@ -36,10 +37,17 @@ async function run() {
 
   const referenceRegExp = createReferenceRegExp(customKeywords)
 
-  const connectedIssues = parseReferencedIssues(
+  const connectedIssuesFromBody = parseReferencedIssues(
     issueData.body ?? '',
     referenceRegExp
   )
+
+  const connectedIssuesFromTitle = fromTitle ? parseReferencedIssues(
+    issueData.title ?? '',
+    referenceRegExp
+  ) : []
+  // the same issue may come from both title and body. we should use uniq to dedupe them.
+  const connectedIssues = uniq([...connectedIssuesFromBody, ...connectedIssuesFromTitle])
 
   const connectedLabelsResponses = await Promise.all(
     connectedIssues.map(async (connectedIssue) =>
