@@ -19,7 +19,7 @@ jobs:
     name: Copy labels from linked issues
     steps:
       - name: copy-labels
-        uses: michalvankodev/copy-issue-labels@v1.2.0
+        uses: michalvankodev/copy-issue-labels@v1.2.1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -46,7 +46,7 @@ These keywords will not override github specified keywords.
 ```yml
 steps:
   - name: copy-labels
-    uses: michalvankodev/copy-issue-labels@v1.2.0
+    uses: michalvankodev/copy-issue-labels@v1.2.1
     with:
       repo-token: ${{ secrets.GITHUB_TOKEN }}
       custom-keywords: |
@@ -61,7 +61,7 @@ You can provide from-title = true to parse the issue numbers from title
 ```yml
 steps:
   - name: copy-labels
-    uses: michalvankodev/copy-issue-labels@v1.2.0
+    uses: michalvankodev/copy-issue-labels@v1.2.1
     with:
       repo-token: ${{ secrets.GITHUB_TOKEN }}
       from-title: true

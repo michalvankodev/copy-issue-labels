@@ -14,10 +14,18 @@ function getInputAsArray(name: string, options?: core.InputOptions): string[] {
     .filter((x) => x !== '')
 }
 
+function getBooleanInput(name: string, options?: core.InputOptions, defaultValue: boolean = false): boolean {
+  try {
+    return core.getBooleanInput(name, options)
+  } catch (ex) {
+    return defaultValue
+  }
+}
+
 async function run() {
   const token = core.getInput('repo-token', { required: true })
   const customKeywords = getInputAsArray('custom-keywords', { required: false })
-  const fromTitle = core.getBooleanInput('from-title', { required: false })
+  const fromTitle = getBooleanInput('from-title', { required: false })
 
   const issueNumber = getIssueNumber(
     core.getInput('issue-number', { required: false })
@@ -66,7 +74,7 @@ async function run() {
     }, [])
   )
 
-  await client.issues.addLabels({
+  labels.length > 0 && await client.issues.addLabels({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: issueNumber,
