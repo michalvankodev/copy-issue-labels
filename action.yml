@@ -10,6 +10,7 @@ inputs:
     description: 'List of custom keywords which should be included in the parser'
   from-title:
     description: 'To parse the issue numbers from title, a boolean'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
