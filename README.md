@@ -77,3 +77,5 @@ The deployed code is stored in the repository as that's how github action runner
 2. Commit
 3. Create a new git tag: `git tag -a -m "Feature added" v1.x.y`
 4. Publish `git push --follow-tags`
+
+## Testing branch for just triggering the workflow
