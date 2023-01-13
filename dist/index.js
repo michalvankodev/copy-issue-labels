@@ -46,12 +46,20 @@ function getInputAsArray(name, options) {
         .map((s) => s.trim())
         .filter((x) => x !== '');
 }
+function getBooleanInput(name, options, defaultValue = false) {
+    try {
+        return core.getBooleanInput(name, options);
+    }
+    catch (ex) {
+        return defaultValue;
+    }
+}
 function run() {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const token = core.getInput('repo-token', { required: true });
         const customKeywords = getInputAsArray('custom-keywords', { required: false });
-        const fromTitle = core.getBooleanInput('from-title', { required: false });
+        const fromTitle = getBooleanInput('from-title', { required: false });
         const issueNumber = getIssueNumber(core.getInput('issue-number', { required: false }));
         if (issueNumber === undefined) {
             core.setFailed('No issue specified');
@@ -79,12 +87,12 @@ function run() {
             const issueLabels = response.data.map((label) => label.name);
             return [...acc, ...issueLabels];
         }, []));
-        yield client.issues.addLabels({
+        labels.length > 0 && (yield client.issues.addLabels({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: issueNumber,
             labels,
-        });
+        }));
     });
 }
 function getIssueNumber(pullNumber) {
