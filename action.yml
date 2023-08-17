@@ -11,6 +11,9 @@ inputs:
   from-title:
     description: 'To parse the issue numbers from title, a boolean'
     required: false
+  issue-number:
+    description: 'Get linked issues from Pull Request number'
+    required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
