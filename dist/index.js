@@ -59,6 +59,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const token = core.getInput('repo-token', { required: true });
         const customKeywords = getInputAsArray('custom-keywords', { required: false });
+        const labelsToCopy = getInputAsArray('labels-to-copy', { required: false });
+        const labelsToExclude = getInputAsArray('labels-to-exclude', { required: false });
         const fromTitle = getBooleanInput('from-title', { required: false });
         const issueNumber = getIssueNumber(core.getInput('issue-number', { required: false }));
         if (issueNumber === undefined) {
@@ -85,7 +87,19 @@ function run() {
         })));
         const labels = issue_parser_1.uniq(connectedLabelsResponses.reduce((acc, response) => {
             const issueLabels = response.data.map((label) => label.name);
-            return [...acc, ...issueLabels];
+            // Filter out unwanted labels and keep only the ones that are needed
+            const filteredLabels = issueLabels.filter(label => {
+                if (labelsToCopy.length > 0 && !labelsToCopy.includes(label)) {
+                    // Label not in labelsToCopy
+                    return false;
+                }
+                if (labelsToExclude.length > 0 && labelsToExclude.includes(label)) {
+                    // Label in labelsToExclude
+                    return false;
+                }
+                return true;
+            });
+            return [...acc, ...filteredLabels];
         }, []));
         labels.length > 0 && (yield client.issues.addLabels({
             owner: github.context.repo.owner,

@@ -25,6 +25,8 @@ function getBooleanInput(name: string, options?: core.InputOptions, defaultValue
 async function run() {
   const token = core.getInput('repo-token', { required: true })
   const customKeywords = getInputAsArray('custom-keywords', { required: false })
+  const labelsToCopy = getInputAsArray('labels-to-copy', { required: false });
+  const labelsToExclude = getInputAsArray('labels-to-exclude', { required: false });
   const fromTitle = getBooleanInput('from-title', { required: false })
 
   const issueNumber = getIssueNumber(
@@ -69,8 +71,21 @@ async function run() {
 
   const labels = uniq(
     connectedLabelsResponses.reduce<string[]>((acc, response) => {
-      const issueLabels = response.data.map((label) => label.name)
-      return [...acc, ...issueLabels]
+      const issueLabels = response.data.map((label) => label.name);
+      // Filter out unwanted labels and keep only the ones that are needed
+      const filteredLabels = issueLabels.filter(label => {
+          if (labelsToCopy.length > 0 && !labelsToCopy.includes(label)) {
+              // Label not in labelsToCopy
+              return false;
+          }
+          if (labelsToExclude.length > 0 && labelsToExclude.includes(label)) {
+              // Label in labelsToExclude
+              return false;
+          }
+          return true;
+      });
+      
+      return [...acc, ...filteredLabels]
     }, [])
   )
 

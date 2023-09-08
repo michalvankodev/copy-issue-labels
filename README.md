@@ -67,6 +67,25 @@ steps:
       from-title: true
 ```
 
+## Include-Exclude labels
+
+You can provide an inclusion/exclusion list to filter linked issue labels before copying them to the PR
+
+```yml
+steps:
+  - name: copy-labels
+    uses: michalvankodev/copy-issue-labels@v1.3.0
+    with:
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      labels-to-copy: |
+        documentation
+        enhancement
+      labels-to-exclude: |
+        untriaged
+        triaged
+```
+
+
 ## Development
 
 The deployed code is stored in the repository as that's how github action runner is able to run the action with _runners_.

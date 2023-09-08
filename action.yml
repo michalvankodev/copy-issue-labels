@@ -1,6 +1,6 @@
 name: 'copy-issue-labels'
 description: 'Copy labels from linkend issues'
-author: 'Michal Vanko'
+author: 'Michal Vanko, Darshit Chanpura'
 icon: 'bookmark'
 color: 'yellow'
 inputs:
@@ -11,6 +11,12 @@ inputs:
   from-title:
     description: 'To parse the issue numbers from title, a boolean'
     required: false
+  labels-to-copy:
+    description: 'List of labels that should be included when copying'
+    required: false
+  labels-to-exclude:
+    description: 'List of labels that should be excluded when copying'
+    required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
