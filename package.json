@@ -1,6 +1,6 @@
 {
   "name": "copy-issue-labels",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "Github action for copying labels of linked issues",
   "main": "lib/index.js",
   "scripts": {
