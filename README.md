@@ -19,7 +19,7 @@ jobs:
     name: Copy labels from linked issues
     steps:
       - name: copy-labels
-        uses: michalvankodev/copy-issue-labels@v1.2.1
+        uses: michalvankodev/copy-issue-labels@v1.3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -29,7 +29,7 @@ There is also support for different workflows to trigger sync of the labels with
 ```yml
     steps:
       - name: copy-labels
-        uses: michalvankodev/copy-issue-labels@v0.2.12
+        uses: michalvankodev/copy-issue-labels@v1.3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.inputs.issue }}
@@ -59,11 +59,30 @@ You can provide from-title = true to parse the issue numbers from title
 ```yml
 steps:
   - name: copy-labels
-    uses: michalvankodev/copy-issue-labels@v1.2.1
+    uses: michalvankodev/copy-issue-labels@v1.3.0
     with:
       repo-token: ${{ secrets.GITHUB_TOKEN }}
       from-title: true
 ```
+
+## Include-Exclude labels
+
+You can provide an inclusion/exclusion list to filter linked issue labels before copying them to the PR
+
+```yml
+steps:
+  - name: copy-labels
+    uses: michalvankodev/copy-issue-labels@v1.3.0
+    with:
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      labels-to-include: |
+        documentation
+        enhancement
+      labels-to-exclude: |
+        untriaged
+        triaged
+```
+
 
 ## Development
 

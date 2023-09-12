@@ -11,6 +11,11 @@ inputs:
   from-title:
     description: 'To parse the issue numbers from title, a boolean'
     required: false
+  labels-to-include:
+    description: 'List of labels that should be included when copying'
+    required: false
+  labels-to-exclude:
+    description: 'List of labels that should be excluded when copying'
   issue-number:
     description: 'Get linked issues from Pull Request number'
     required: false
