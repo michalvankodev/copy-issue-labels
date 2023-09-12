@@ -5,6 +5,9 @@ import {
   parseReferencedIssues,
   uniq,
 } from './issue-parser'
+import {
+  parseLinkedIssues
+} from './link-parser'
 
 function getInputAsArray(name: string, options?: core.InputOptions): string[] {
   return core
@@ -56,8 +59,11 @@ async function run() {
     issueData.title ?? '',
     referenceRegExp
   ) : []
+
+  const linkedIssues = await parseLinkedIssues(client, issueNumber, github.context.repo.owner, github.context.repo.repo)
+
   // the same issue may come from both title and body. we should use uniq to dedupe them.
-  const connectedIssues = uniq([...connectedIssuesFromBody, ...connectedIssuesFromTitle])
+  const connectedIssues = uniq([...connectedIssuesFromBody, ...connectedIssuesFromTitle, ...linkedIssues])
 
   const connectedLabelsResponses = await Promise.all(
     connectedIssues.map(async (connectedIssue) =>
