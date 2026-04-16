@@ -20,5 +20,5 @@ inputs:
     description: 'Get linked issues from Pull Request number'
     required: false
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dist/index.js'
